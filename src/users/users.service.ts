@@ -19,10 +19,60 @@
 //   }
 // ─────────────────────────────────────────────────────────────────────────────
 
-import { Injectable } from '@nestjs/common';
+export interface User {
+    id: number;   
+    name: string;
+    email: string;
+    age: number;
+    role: string;
+}
+
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 // TODO: import NotFoundException and your DTOs
 
 @Injectable()
 export class UsersService {
   // TODO: implement the service
+
+  private users: User[] = [
+      { id: 1, name: 'Design DB schema', email    : 'hola@gmail.com', age: 25, role: 'student' },
+      { id: 2, name: 'Build REST API', email: 'implement@nestjs.com', age: 30, role: 'teacher' },
+      { id: 3, name: 'Write tests', email: 'tests@nestjs.com', age: 28, role: 'admin' },
+    ];
+    private nextId = 4;
+
+  findAll(): User[]{
+    return this.users;
+  }
+
+  findOne(id:number): User{
+    const user = this.users.find((u => u.id === id));
+    if(!user) throw new NotFoundException(`User #${id} not found`);
+    return user;
+  }
+
+  create( user: CreateUserDto): User{
+    const newUser = {id: this.nextId++,
+    name: user.name,
+    email: user.email,
+    age: Number(user.age),
+    role: user.role ?? 'student'
+     };
+    this.users.push(newUser);
+    return newUser;
+  }
+
+  update(id: number, userDto: UpdateUserDto): User{
+    const user = this.findOne(id);
+    Object.assign(user, userDto);
+    return user;
+  }
+
+  remove(id:number):User{
+    const user = this.findOne(id);
+    this.users = this.users.filter((u) => u.id !== id);
+    return user;
+  }
 }

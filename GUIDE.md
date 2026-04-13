@@ -197,6 +197,7 @@ File: `src/tasks/dto/update-task.dto.ts`
 
 Copy the fields from `CreateTaskDto`. Every field must be optional — add `@IsOptional()` to each.
 
+
 ### Activity 2-C – Complete the Tasks controller
 
 File: `src/tasks/tasks.controller.ts`
@@ -212,15 +213,17 @@ The method bodies are already written. You need to:
 curl http://localhost:3000/tasks
 
 # Create a task (should succeed)
-curl -X POST http://localhost:3000/tasks \
-  -H "Content-Type: application/json" \
-  -d '{"title": "My new task", "status": "pending"}'
+curl -X POST http://localhost:3000/tasks -H "Content-Type: application/json" -d '{"title": "My new task", "status": "pending"}'
 
 # Try creating with invalid data (should return 400)
 curl -X POST http://localhost:3000/tasks \
   -H "Content-Type: application/json" \
   -d '{"title": "ab", "status": "flying"}'
 ```
+
+
+
+
 
 ---
 
